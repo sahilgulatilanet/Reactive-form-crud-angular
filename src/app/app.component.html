@@ -1,0 +1,41 @@
+<!--The content below is only a placeholder and can be replaced.-->
+<div style="text-align:center">
+  <h1>
+    Welcome to {{ title }}!
+  </h1>
+
+</div>
+<div class="container">
+  <div class="row">
+    <form [formGroup]="studform" (ngSubmit)="onRegClk()">
+      <div class="form-group">
+
+          <input class="form-control" formControlName="nm" placeholder="Enter Name">
+        <label *ngIf="studform.get('nm').invalid && validate">Enter more than 4 charaters:</label>
+      </div>
+      <div class="form-group">
+
+          <input class="form-control" formControlName="ad" placeholder="Enter Address">
+        <label *ngIf="studform.get('ad').invalid && validate">Enter Address</label>
+      </div>
+      <div class="form-group">
+        <button type="submit" class="form-control" *ngIf="!updclk" >Insert</button>
+        <button type="submit" class="form-control" *ngIf="updclk">Update</button>
+        <button type="button" class="form-control" *ngIf="updclk" (click)="onCancleClk()">Cancle</button>
+      </div>
+    </form>
+  </div>
+
+</div>
+<div class="container">
+  <table class="table">
+    <tr *ngFor="let d of data">
+      <td>{{d.sid}}</td>
+      <td>{{d.snm}}</td>
+      <td>{{d.sad}}</td>
+      <td><button (click)="onUpdClk(d.sid)" class="form-control">Update</button></td>
+      <td><button (click)="onDelClk(d.sid)" class="form-control">Delete</button> </td>
+    </tr>
+  </table>
+</div>
+
