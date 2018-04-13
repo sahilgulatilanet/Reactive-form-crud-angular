@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {DatabaseService} from "./database.service";
+import {NgbModal,  ModalDismissReasons} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: 'app-root',
@@ -12,12 +13,14 @@ export class AppComponent {
   data;
   updclk=false;
   validate=false;
+  closeResult: string;
+  content;
   studform= new FormGroup({
     id:new FormControl('',),
     nm:new FormControl('',[Validators.required,Validators.minLength(4)]),
     ad:new FormControl('',Validators.required)
   });
-  constructor(private database:DatabaseService){
+  constructor(private database:DatabaseService,private modalService: NgbModal){
     this.onViewStud();
   }
   onRegClk(){
@@ -25,7 +28,7 @@ export class AppComponent {
     this.validate=true;
     let stud=this.studform.value;
     //alert(stud.id);
-    alert(this.studform.untouched);
+    //alert(this.studform.untouched);
     if(!this.studform.invalid) {
       if (this.updclk) {
         this.database.updateStud(stud).subscribe((res) => {
@@ -59,6 +62,8 @@ export class AppComponent {
         ad:res['ad']
       });
       this.updclk=true;
+
+
     });
   }
   onDelClk(data){
@@ -79,5 +84,22 @@ export class AppComponent {
       console.log(res);
       this.data=res;
     });
+  }
+  open(content) {
+    this.modalService.open(content).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return  `with: ${reason}`;
+    }
   }
 }

@@ -27,15 +27,64 @@
   </div>
 
 </div>
+
 <div class="container">
-  <table class="table">
+  <table class="display" id="example">
+    <thead>
+    <tr>
+      <th>Id</th>
+      <th>Name</th>
+      <th>Address</th>
+      <th>Update</th>
+      <th>Delete</th>
+
+    </tr>
+    </thead>
+    <tbody>
     <tr *ngFor="let d of data">
       <td>{{d.sid}}</td>
       <td>{{d.snm}}</td>
       <td>{{d.sad}}</td>
-      <td><button (click)="onUpdClk(d.sid)" class="form-control">Update</button></td>
+      <td><button (click)="onUpdClk(d.sid); open(content)" class="form-control">Update</button></td>
       <td><button (click)="onDelClk(d.sid)" class="form-control">Delete</button> </td>
     </tr>
+    </tbody>
   </table>
 </div>
+<ng-template #content let-c="close" let-d="dismiss" >
+  <div class="modal-header">
+    <h4 class="modal-title">Modal title</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>One fine body&hellip;</p>
+
+    <form [formGroup]="studform" (ngSubmit)="onRegClk();c('Close click')">
+    <div class="form-group">
+
+      <input class="form-control" formControlName="nm" placeholder="Enter Name">
+      <label *ngIf="studform.get('nm').invalid && validate">Enter more than 4 charaters:</label>
+    </div>
+    <div class="form-group">
+
+      <input class="form-control" formControlName="ad" placeholder="Enter Address">
+      <label *ngIf="studform.get('ad').invalid && validate">Enter Address</label>
+    </div>
+    <div class="form-group">
+      <button type="submit" class="form-control" *ngIf="!updclk" >Insert</button>
+      <button type="submit" class="form-control" *ngIf="updclk">Update</button>
+      <button type="button" class="form-control" *ngIf="updclk" (click)="onCancleClk()">Cancle</button>
+    </div>
+  </form>
+
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Close</button>
+  </div>
+</ng-template>
+
+<button class="btn btn-lg btn-outline-primary" (click)="open(content)">Insert</button>
+
 
